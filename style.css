@@ -1,0 +1,861 @@
+/* --- style.css --- */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg-dark: linear-gradient(135deg, #09090b 0%, #0c0a0f 50%, #1e1124 100%);
+    --bg-light: linear-gradient(135deg, #fff5f5 0%, #fff0f6 50%, #f3f0ff 100%);
+    --text-dark: #f4f4f5;
+    --text-light: #27272a;
+    --pink-pastel: #ff8fab;
+    --pink-light: #ffc2d1;
+    --gold-pastel: #ffe3a8;
+}
+
+html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    overflow: hidden; position: fixed;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.8s ease, color 0.8s ease;
+}
+
+/* /* Animated Nebula Background */
+.nebula-bg {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: radial-gradient(at 0% 0%, #1c0a18 0px, transparent 50%), 
+                radial-gradient(at 50% 0%, #29101f 0px, transparent 50%), 
+                radial-gradient(at 100% 0%, #150917 0px, transparent 50%);
+    background-color: #0f0710;
+    background-size: 200% 200%;
+    animation: meshFlow 15s ease infinite alternate;
+    z-index: 1; overflow: hidden;
+}
+.nebula-cloud {
+    position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.6;
+    mix-blend-mode: multiply; animation: floatClouds 22s infinite alternate ease-in-out;
+}
+.cloud-pink {
+    width: 500px; height: 500px; background: radial-gradient(circle, #ffd1dc 0%, rgba(255, 209, 220, 0) 70%);
+    top: -100px; left: -100px;
+}
+.cloud-purple {
+    width: 600px; height: 600px; background: radial-gradient(circle, #e8dbff 0%, rgba(232, 219, 255, 0) 70%);
+    bottom: -150px; right: -100px;
+    animation-delay: -5s;
+}
+.cloud-gold {
+    width: 400px; height: 400px; background: radial-gradient(circle, #ffe9be 0%, rgba(255, 233, 190, 0) 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    animation-delay: -11s;
+}
+@keyframes floatClouds {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(70px, 40px) scale(1.15); }
+}
+
+body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+body.light {
+    background: var(--bg-dark); /* Force dark theme everywhere */
+    color: var(--text-dark);
+}
+
+/* Canvas for background effects */
+#ambient-canvas {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2; pointer-events: none;
+}
+
+.flex-center {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+}
+
+/* Page transitions state machine */
+section {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none;
+    transform: scale(0.97);
+    transition: opacity 1.2s ease-in-out, transform 1.4s ease-out;
+    z-index: 10; overflow: hidden;
+}
+section.active {
+    opacity: 1; pointer-events: all;
+    transform: scale(1);
+    z-index: 20;
+}
+
+/* --- Floating Theme & Audio Controls --- */
+.floating-controls {
+    position: fixed; top: 20px; right: 20px;
+    display: flex; gap: 12px; z-index: 999;
+}
+.control-btn {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #1f2937;
+    width: 45px; height: 45px; border-radius: 50%;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s;
+    backdrop-filter: blur(8px);
+}
+.control-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: scale(1.08);
+}
+
+/* --- Buttons --- */
+.main-btn {
+    background: linear-gradient(90deg, var(--pink-pastel), #ffd700);
+    border: none; color: #1e1b4b;
+    padding: 12px 35px; border-radius: 30px;
+    font-weight: 700; font-size: 0.9rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 15px rgba(255, 143, 171, 0.3);
+}
+.main-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 143, 171, 0.5);
+}
+.main-btn.outline {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: #27272a;
+}
+.main-btn.outline:hover {
+    border-color: var(--pink-pastel);
+    box-shadow: 0 0 15px rgba(255, 143, 171, 0.2);
+    color: var(--pink-pastel);
+}
+
+/* Glass card containers */
+.glass-card {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(255, 143, 171, 0.25);
+    border-radius: 24px; padding: 35px 30px;
+    box-shadow: 0 15px 35px rgba(255, 143, 171, 0.1);
+    backdrop-filter: blur(16px);
+    width: 90%; max-width: 440px; text-align: center;
+}
+
+/* --- Ornate corner brackets on the seal challenge card --- */
+.suspense-box {
+    position: relative;
+}
+.suspense-box::before,
+.suspense-box::after {
+    content: '';
+    position: absolute;
+    width: 26px; height: 26px;
+    border: 2px solid rgba(255, 227, 168, 0.65);
+    opacity: 0.85;
+}
+.suspense-box::before {
+    top: 12px; left: 12px;
+    border-right: none; border-bottom: none;
+}
+.suspense-box::after {
+    bottom: 12px; right: 12px;
+    border-left: none; border-top: none;
+}
+
+/* --- 1. BIRTHDAY LOCK BOX --- */
+.lock-icon {
+    font-size: 3rem; margin-bottom: 12px;
+    animation: pulseGlow 2s infinite alternate;
+}
+.lock-icon-wrap {
+    margin-bottom: 22px;
+    display: flex; justify-content: center;
+    filter: drop-shadow(0 0 12px rgba(255, 227, 168, 0.6));
+    animation: pulseGlow 2s infinite alternate;
+}
+@keyframes pulseGlow {
+    0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 143, 171, 0.4)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 15px rgba(255, 143, 171, 0.8)); }
+}
+@keyframes laserScan {
+    0% { top: 0; opacity: 1; }
+    50% { top: 100%; opacity: 1; }
+    100% { top: 0; opacity: 1; }
+}
+@keyframes holographic {
+    0% { transform: rotate(45deg) translate(-100%, -100%); opacity: 0; }
+    50% { opacity: 0.8; }
+    100% { transform: rotate(45deg) translate(300%, 300%); opacity: 0; }
+}
+.lock-title {
+    font-family: 'Cinzel', serif; font-size: 1.5rem;
+    color: var(--pink-pastel); font-weight: 600;
+}
+.lock-subtitle {
+    font-size: 0.8rem; color: #71717a; margin: 6px 0 25px;
+    letter-spacing: 1px;
+}
+
+/* --- PHONE LOCK SCREEN --- */
+.phone-lock-container {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+}
+.passcode-dots .dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 227, 168, 0.7);
+    transition: all 0.25s ease;
+}
+.passcode-dots .dot.filled {
+    background: linear-gradient(135deg, #ff8fab, #ffe3a8);
+    border-color: transparent;
+    box-shadow: 0 0 10px rgba(255, 143, 171, 0.7);
+}
+.passcode-dots.error {
+    animation: shake 0.4s;
+}
+.passcode-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 30px;
+}
+.keypad-btn {
+    width: 75px; height: 75px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 227, 168, 0.3);
+    color: #fff;
+    font-size: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+.keypad-btn:active {
+    background: linear-gradient(145deg, rgba(255, 143, 171, 0.4), rgba(255, 215, 0, 0.25));
+    border-color: #ffe3a8;
+    box-shadow: 0 0 22px rgba(255, 143, 171, 0.55);
+    transform: scale(0.96);
+}
+.delete-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+}
+.delete-btn:active {
+    background: rgba(255,255,255,0.1);
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+}
+.date-input-container input:focus {
+    border-color: var(--pink-pastel);
+}
+.date-input-container .divider {
+    font-size: 1.3rem; color: rgba(0, 0, 0, 0.2);
+}
+.error-msg {
+    font-size: 0.75rem; color: #f87171; margin-top: 15px;
+}
+
+/* --- 4. STARS FINALE / MAGICAL ENTRANCE --- */
+#stars-page {
+    position: relative;
+    overflow: hidden;
+    background: #0f0a15; /* Fallback */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6vh 0 8vh 0;
+    box-sizing: border-box;
+}
+
+/* Entrance Wrapper needs to occupy the full area to center the gate properly */
+#entrance-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    z-index: 20;
+    text-align: center;
+}
+
+/* Beautiful premium text display for Name and Age - placed at top-middle when cake is active */
+#stars-text-display {
+    position: relative;
+    z-index: 200;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: transform 1s ease;
+}
+
+/* Cake Container repositioned below to avoid overlap */
+.cake-container {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: 0;
+    z-index: 10;
+    transform: scale(0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
+}
+
+.cake-container.show {
+    transform: scale(1.05);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Animated Mesh Gradient Background */
+.mesh-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    background: radial-gradient(at 10% 20%, rgba(255, 143, 171, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 10%, rgba(255, 227, 168, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 80%, rgba(192, 66, 78, 0.15) 0px, transparent 50%);
+    background-size: 200% 200%;
+    animation: meshFlow 15s ease infinite alternate;
+}
+
+@keyframes meshFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+/* Glowing gold gate anims */
+.gate-glowing {
+    animation: gateFloat 4s ease-in-out infinite;
+    transition: filter 0.5s ease, transform 0.5s ease;
+}
+.gate-glowing:hover {
+    filter: drop-shadow(0 0 45px rgba(255, 227, 168, 1)) !important;
+    transform: scale(1.05);
+}
+
+@keyframes gateFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Floating background petals */
+.petal-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.entrance-petal {
+    position: absolute;
+    background: rgba(255, 143, 171, 0.6);
+    border-radius: 150% 0 150% 150%;
+    transform: rotate(45deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* --- 2. VIDEO MEMORY STAGE --- */
+#sparkle-pen-page { 
+    /* Keep transparent to show global background */ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.video-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    color: #fce7f3;
+    font-style: italic;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.video-section-subtitle {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-transform: lowercase;
+}
+.video-frame {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 143, 171, 0.15);
+    background: #000;
+    border: 3px solid transparent;
+    background-image: linear-gradient(#000, #000), linear-gradient(135deg, #ffe3a8, #ff8fab 50%, #ffe3a8);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+.video-frame::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle, transparent 55%, rgba(0,0,0,0.35) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+.styled-video {
+    width: 100%;
+    height: auto;
+    max-height: 65vh;
+    object-fit: contain;
+    display: block;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+.video-overlay:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+.video-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.play-btn-circle {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+    animation: pulseGlow 2s infinite alternate;
+    transition: transform 0.25s, background 0.25s;
+}
+.video-overlay:hover .play-btn-circle {
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.22);
+}
+.play-icon {
+    font-size: 2.1rem;
+    margin-left: 6px;
+    color: #fff;
+    filter: drop-shadow(0 0 8px rgba(255, 143, 171, 0.8));
+}
+.video-caption {
+    font-family: 'Outfit', sans-serif;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* --- INTERACTIVE RIBBON --- */
+.interactive-ribbon-wrapper {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 100%;
+    z-index: 25;
+    pointer-events: none;
+}
+.ribbon-v, .ribbon-h {
+    position: absolute;
+    background: linear-gradient(90deg, #d90429, #ef233c, #d90429);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: opacity 0.5s;
+}
+.ribbon-v {
+    top: 50px; left: 50%; transform: translateX(-50%);
+    width: 30px; height: 75%;
+}
+.ribbon-h {
+    top: 55%; left: 10%;
+    width: 80%; height: 30px;
+    background: linear-gradient(0deg, #d90429, #ef233c, #d90429);
+}
+.gift-bow {
+    position: absolute;
+    top: 45%; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 60px;
+    z-index: 40;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.3s;
+}
+.gift-bow:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+.bow-loop-left, .bow-loop-right {
+    position: absolute;
+    top: 0; width: 60px; height: 50px;
+    border: 15px solid #ef233c;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+    transition: all 0.6s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+.bow-loop-left { left: -10px; transform: rotate(-45deg); border-radius: 50px 50px 0 50px; }
+.bow-loop-right { right: -10px; transform: rotate(45deg); border-radius: 50px 50px 50px 0; }
+.bow-knot {
+    position: absolute;
+    top: 15px; left: 50%; transform: translateX(-50%);
+    width: 30px; height: 30px;
+    background: #d90429;
+    border-radius: 50%;
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.5);
+    z-index: 5;
+    transition: opacity 0.5s;
+}
+.ribbon-tail {
+    position: absolute;
+    top: 25px; left: 50%;
+    width: 0; height: 25px;
+    background: #ef233c;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+    z-index: 6;
+    opacity: 0;
+}
+
+/* Untying Animation */
+.gift-bow.untying .bow-loop-left { transform: rotate(-90deg) scale(0); opacity: 0; }
+.gift-bow.untying .bow-loop-right { transform: rotate(90deg) scale(0); opacity: 0; }
+.gift-bow.untying .bow-knot { opacity: 0; }
+.gift-bow.untying .ribbon-tail {
+    opacity: 1;
+    animation: pullRibbon 1.5s forwards ease-in-out;
+}
+@keyframes pullRibbon {
+    0% { width: 0; transform: translateX(0); }
+    50% { width: 600px; transform: translateX(0) rotate(5deg); }
+    100% { width: 600px; transform: translateX(100vw) rotate(15deg); opacity: 0; }
+}
+
+.gift-container.opened .ribbon-v, 
+.gift-container.opened .ribbon-h {
+    opacity: 0;
+}
+
+.pull-ribbon-text {
+    position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%); 
+    font-family: 'Cinzel', serif; color: #fff; font-size: 1.2rem; font-weight: 600; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3); margin: 0; background: rgba(219,39,119,0.5); 
+    padding: 8px 20px; border-radius: 20px; backdrop-filter: blur(10px); white-space: nowrap;
+    animation: bounce 2s infinite; transition: opacity 0.3s; pointer-events: none;
+}
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, -10px); }
+}
+.gift-container.opened .pull-ribbon-text, .gift-bow.untying ~ .pull-ribbon-text {
+    opacity: 0;
+}
+
+/* --- 3. MAGICAL MESSAGE STAGE --- */
+.glass-message-card {
+    background: rgba(20, 5, 25, 0.65);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 143, 171, 0.25);
+    border-radius: 30px;
+    padding: 50px 40px;
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transform: translateY(0);
+    animation: floatCard 6s ease-in-out infinite;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); box-shadow: 0 40px 70px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05); }
+}
+
+.letter-ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.55;
+    z-index: 1;
+    pointer-events: none;
+    animation: floatClouds 18s ease-in-out infinite alternate;
+}
+.letter-ambient-glow.glow-a {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #ffd1dc 0%, transparent 70%);
+    top: 8%; left: 4%;
+}
+.letter-ambient-glow.glow-b {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, #ffe9be 0%, transparent 70%);
+    bottom: 6%; right: 6%;
+    animation-delay: -6s;
+}
+.ornate-divider {
+    display: flex; align-items: center; gap: 12px;
+    color: #ffe3a8; font-size: 0.9rem;
+    margin: -6px 0 4px;
+}
+.ornate-divider span {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 227, 168, 0.7), transparent);
+}
+.typing-cursor {
+    display: inline-block;
+    animation: blink 0.8s infinite;
+    color: #ffe3a8;
+    font-weight: 600;
+}
+
+.crown-icon {
+    font-size: 3rem;
+    margin-bottom: -15px;
+    filter: drop-shadow(0 5px 15px rgba(255, 143, 171, 0.5));
+}
+.message-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: #ff8fab;
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(255, 143, 171, 0.4);
+}
+.message-content {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #fce7f3;
+    margin: 10px 0;
+    font-weight: 300;
+}
+.message-footer {
+    border-top: 1px solid rgba(219, 39, 119, 0.15);
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: opacity 1s ease;
+}
+.message-footer.hidden {
+    opacity: 0; pointer-events: none; display: none;
+}
+.closing {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: #db2777;
+}
+
+/* --- 4. GARDEN FINALE STAGE --- */
+/* (Removed dark background to allow pastel nebula to show through) */
+#galaxy-canvas {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 5;
+}
+.flower-fall-item {
+    position: absolute; pointer-events: none;
+    z-index: 8; opacity: 1;
+}
+
+/* --- Virtual Cake --- */
+#cake-container {
+    position: absolute; bottom: 5%; left: 50%;
+    transform: translateX(-50%); z-index: 150;
+    text-align: center; opacity: 0; pointer-events: none;
+    transition: opacity 2s ease, bottom 2s ease;
+}
+#cake-container.show {
+    opacity: 1; bottom: 15%; pointer-events: auto;
+}
+.cake {
+    position: relative; width: 160px; height: 120px;
+    margin: 0 auto;
+    filter: drop-shadow(0 15px 20px rgba(0,0,0,0.35));
+    animation: cakeIdle 4s ease-in-out infinite;
+}
+@keyframes cakeIdle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+.plate {
+    position: absolute; bottom: -10px; left: -20px;
+    width: 200px; height: 18px; background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+.layer {
+    position: absolute; display: block; width: 160px;
+    height: 40px; border-radius: 10px;
+    box-shadow: inset 0 -8px 12px rgba(190, 24, 93, 0.18), inset 0 3px 6px rgba(255,255,255,0.4);
+}
+.layer-bottom { bottom: 0; background: linear-gradient(180deg, #ffd6e0 0%, #ffb3c6 100%); }
+.layer-middle { bottom: 35px; background: linear-gradient(180deg, #ffc2d1 0%, #ff9fb8 100%); }
+.layer-top { bottom: 70px; background: linear-gradient(180deg, #ffa8c0 0%, #ff8fab 100%); }
+.icing {
+    position: absolute; top: 5px; left: 0;
+    width: 160px; height: 25px;
+    background: linear-gradient(180deg, #ffffff 0%, #fff2f6 100%);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.5) inset;
+}
+.sprinkle {
+    position: absolute; top: -2px;
+    width: 4px; height: 10px; border-radius: 2px;
+}
+.sprinkle.s1 { left: 12px; background: #ffd700; transform: rotate(15deg); }
+.sprinkle.s2 { left: 38px; background: #a78bfa; transform: rotate(-12deg); }
+.sprinkle.s3 { left: 66px; background: #7dd3fc; transform: rotate(18deg); }
+.sprinkle.s4 { left: 92px; background: #ff8fab; transform: rotate(-16deg); }
+.sprinkle.s5 { left: 118px; background: #ffd700; transform: rotate(10deg); }
+.sprinkle.s6 { left: 140px; background: #a78bfa; transform: rotate(-20deg); }
+.cake-topper {
+    position: absolute; top: -58px; left: 108px;
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.85rem;
+    color: #7c2d12; background: linear-gradient(135deg, #ffe3a8, #ffd700);
+    padding: 3px 9px; border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transform: rotate(8deg);
+}
+.drip {
+    position: absolute; background: #fff; width: 18px;
+    border-radius: 0 0 10px 10px;
+}
+.drip1 { top: 15px; left: 20px; height: 25px; }
+.drip2 { top: 15px; left: 70px; height: 40px; }
+.drip3 { top: 15px; left: 120px; height: 20px; }
+.candle {
+    position: absolute; top: -30px; left: 75px;
+    width: 10px; height: 40px;
+    background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff007f 5px, #ff007f 10px);
+    border-radius: 2px;
+}
+.flame {
+    position: absolute; top: -15px; left: 1px;
+    width: 8px; height: 16px; background: #ffcc00;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900;
+    animation: flicker 0.5s infinite alternate;
+    cursor: pointer; transition: all 0.3s ease;
+}
+.flame.out {
+    opacity: 0 !important; transform: scale(0) !important;
+    animation: none !important;
+}
+.cake-hint {
+    font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-top: 15px;
+    animation: blink 2s infinite;
+}
+
+/* --- 6. CELEBRATION POPUP --- */
+.celebration-popup {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(2, 1, 10, 0.95); z-index: 1000;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s ease; backdrop-filter: blur(8px);
+}
+.celebration-popup.active {
+    opacity: 1; pointer-events: auto;
+}
+.celebration-content {
+    text-align: center; color: #fff;
+    transform: scale(0.8); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.celebration-popup.active .celebration-content {
+    transform: scale(1);
+}
+.cake-emoji { font-size: 4.5rem; margin-bottom: 10px; animation: bounce 1.5s infinite alternate; }
+.close-pink-btn {
+    background: linear-gradient(90deg, var(--pink-pastel), #ffd700);
+    color: #1e1b4b; border: none; padding: 12px 35px;
+    border-radius: 25px; font-weight: 700;
+    font-family: 'Montserrat', sans-serif; font-size: 0.95rem;
+    cursor: pointer; box-shadow: 0 4px 15px rgba(255, 143, 171, 0.4);
+    transition: transform 0.2s;
+}
+.close-pink-btn:hover { transform: translateY(-2px); }
+
+/* Floating Celebration items */
+.floating-celebration-item {
+    position: absolute; pointer-events: none;
+    z-index: 120; user-select: none;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.9; }
+    100% { transform: translateY(-110vh) rotate(360deg) translateX(100px); opacity: 0; }
+}
+
+/* Helper Animations */
+@keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+
+/* Outline button variant that reads well on the dark celebration popup */
+.celebration-content .main-btn.outline {
+    color: #fce7f3;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.celebration-content .main-btn.outline:hover {
+    color: var(--pink-pastel);
+    border-color: var(--pink-pastel);
+}
+
+/* --- Blow-out shockwave flash --- */
+.blow-flash {
+    position: fixed;
+    width: 40px; height: 40px;
+    margin-left: -20px; margin-top: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,227,168,0.9) 0%, rgba(255,143,171,0.4) 45%, transparent 75%);
+    pointer-events: none;
+    z-index: 260;
+}
+
+/* --- Small-screen safety net --- */
+@media (max-width: 380px) {
+    .keypad-btn { width: 62px; height: 62px; font-size: 1.6rem; }
+    .passcode-keypad { gap: 14px 22px; }
+    .glass-message-card { padding: 35px 22px; }
+    .message-content { font-size: 1rem; }
+}
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+

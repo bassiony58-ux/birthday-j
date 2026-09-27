@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Jana Mater | A Magical Birthday Journey</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light"> <!-- Set light mode by default -->
+
+    <!-- Animated Nebula/Pastel Background Clouds -->
+    <div class="nebula-bg">
+        <div class="nebula-cloud cloud-pink"></div>
+        <div class="nebula-cloud cloud-purple"></div>
+        <div class="nebula-cloud cloud-gold"></div>
+    </div>
+
+    <!-- Ambient background stars & effects canvas -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <!-- Floating music controller -->
+    <div class="floating-controls">
+        <button id="music-toggle" class="control-btn" aria-label="Toggle Music">
+            <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Audio Element (Cozy Lofi Birthday Track) -->
+    <audio id="birthday-music" loop>
+        <source src="birthday_song.m4a" type="audio/mpeg">
+    </audio>
+
+    <!-- 0.1 PRE-LOGIN SUSPENSE STAGE 1: THE MATRIX COUNTDOWN -->
+    <section id="intro-page" class="active" style="background: #000; overflow: hidden; justify-content: center; align-items: center;">
+        <canvas id="matrix-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></canvas>
+        <div id="matrix-text-overlay" style="position: relative; z-index: 2; font-family: 'Cinzel', serif; text-align: center; color: #ff8fab; text-shadow: 0 0 20px #ff8fab; font-weight: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; width: 100%;">
+            <div id="matrix-sequence-text" style="font-size: clamp(4rem, 15vw, 10rem); opacity: 0; transition: opacity 0.5s ease; letter-spacing: 5px;"></div>
+            <div id="intro-btn-container" style="display: none; flex-direction: column; align-items: center; gap: 15px; cursor: pointer;">
+                <button id="intro-next-btn" style="display: block; background: transparent; border: none; cursor: pointer; transition: transform 0.3s; padding: 10px; filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.8));">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="url(#heart-grad)" xmlns="http://www.w3.org/2000/svg" style="animation: pulseGlow 1.5s infinite alternate;">
+                        <defs>
+                            <linearGradient id="heart-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ff9a9e" />
+                                <stop offset="100%" stop-color="#fecfef" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </button>
+                <p id="intro-heart-hint" style="font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 500; color: #ffe3a8; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255, 227, 168, 0.6); opacity: 0.9; animation: pulseGlow 2s infinite alternate; margin: 0;">Tap the heart to begin your journey 💕</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 0.2 PRE-LOGIN SUSPENSE STAGE 2: THE CHALLENGE -->
+    <section id="challenge-page">
+        <div class="glass-card suspense-box flex-center" style="gap: 20px; background: rgba(15, 10, 25, 0.8); border: 1px solid rgba(255, 143, 171, 0.2);">
+            <h2 class="lock-title" style="font-size: 1.5rem; line-height: 1.6; font-family: 'Playfair Display', serif; color: #ff8fab; text-shadow: 0 0 15px rgba(255, 143, 171, 0.5);">"Only one specific soul can unlock this message..."</h2>
+            
+            <div id="magic-seal-btn" style="position: relative; width: 130px; height: 130px; cursor: pointer; margin: 30px 0; transition: transform 0.3s; filter: drop-shadow(0 0 25px rgba(219, 39, 119, 0.6));">
+                <svg viewBox="0 0 100 100" fill="none" stroke="url(#seal-grad)" stroke-width="2" style="width: 100%; height: 100%; animation: pulseGlow 2s infinite alternate;" id="seal-svg">
+                    <defs>
+                        <linearGradient id="seal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff8fab" />
+                            <stop offset="100%" stop-color="#ffd700" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="46" stroke-dasharray="3 6" stroke-width="1.3" />
+                    <circle cx="50" cy="50" r="37" stroke-width="0.8" opacity="0.8" />
+                    <!-- Compass sunburst ticks -->
+                    <g stroke="url(#seal-grad)" stroke-width="1" stroke-linecap="round" opacity="0.6">
+                        <line x1="50" y1="6" x2="50" y2="16" />
+                        <line x1="50" y1="94" x2="50" y2="84" />
+                        <line x1="6" y1="50" x2="16" y2="50" />
+                        <line x1="94" y1="50" x2="84" y2="50" />
+                        <line x1="19" y1="19" x2="26" y2="26" />
+                        <line x1="81" y1="19" x2="74" y2="26" />
+                        <line x1="19" y1="81" x2="26" y2="74" />
+                        <line x1="81" y1="81" x2="74" y2="74" />
+                    </g>
+                    <!-- Delicate sparkle emblem -->
+                    <path d="M50 26 C51.5 39 52.5 40 66 41.5 C52.5 43 51.5 44 50 57 C48.5 44 47.5 43 34 41.5 C47.5 40 48.5 39 50 26 Z" fill="url(#seal-grad)" stroke="none" />
+                </svg>
+            </div>
+            
+            <p id="seal-status" style="font-size: 0.95rem; color: #a1a1aa; font-family: 'Montserrat', sans-serif; letter-spacing: 1px;">TAP THE SEAL TO PROVE YOUR IDENTITY</p>
+        </div>
+    </section>
+
+    <!-- 1. BIRTHDAY LOCK SCREEN (PASSWORD INPUT VIA BIRTH DATE) -->
+    <section id="lock-page" style="background: rgba(15, 10, 21, 0.55); overflow: hidden;">
+        <!-- Luxury Animated Mesh Gradient Background -->
+        <div class="mesh-bg"></div>
+        
+        <div class="phone-lock-container flex-center" style="position: relative; z-index: 10;">
+            <div class="lock-icon-wrap">
+                <svg viewBox="0 0 24 24" width="46" height="46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="lock-grad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffe3a8" />
+                            <stop offset="100%" stop-color="#ff8fab" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M8 11V7.8a4 4 0 0 1 8 0V11" stroke="url(#lock-grad)" stroke-width="1.6" fill="none" stroke-linecap="round" />
+                    <rect x="5" y="11" width="14" height="9.5" rx="2.6" fill="url(#lock-grad)" opacity="0.9" />
+                    <circle cx="12" cy="15.2" r="1.5" fill="#5b1a2e" />
+                    <rect x="11.35" y="15.6" width="1.3" height="2.6" rx="0.6" fill="#5b1a2e" />
+                </svg>
+            </div>
+            <h2 class="lock-title" style="font-size: 1.5rem; margin-bottom: 8px; font-family: 'Montserrat', sans-serif; font-weight: 500; color: #fff; letter-spacing: 1px;">Enter Passcode</h2>
+            <p class="lock-subtitle" style="margin-bottom: 30px; opacity: 0.7;">💭 Hint: a date only you would know</p>
+
+            <div class="passcode-dots" id="passcode-dots" style="display: flex; gap: 15px; margin-bottom: 50px;">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            
+            <div class="passcode-keypad">
+                <button class="keypad-btn">1</button>
+                <button class="keypad-btn">2</button>
+                <button class="keypad-btn">3</button>
+                <button class="keypad-btn">4</button>
+                <button class="keypad-btn">5</button>
+                <button class="keypad-btn">6</button>
+                <button class="keypad-btn">7</button>
+                <button class="keypad-btn">8</button>
+                <button class="keypad-btn">9</button>
+                <button class="keypad-btn empty" style="visibility: hidden;"></button>
+                <button class="keypad-btn">0</button>
+                <button class="keypad-btn delete-btn"><i class="fa-solid fa-delete-left"></i></button>
+            </div>
+
+            <p id="lock-error" class="error-msg hidden" style="margin-top: 30px; font-size: 1rem; color: #ef4444;">Incorrect Passcode</p>
+        </div>
+    </section>
+
+    <!-- 2. VIDEO MEMORY STAGE -->
+    <section id="sparkle-pen-page">
+        <!-- Cinematic Video Screen -->
+        <div id="video-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); z-index: 200; opacity: 0; text-align: center; width: 90%; max-width: 700px;">
+            <h2 class="video-section-title">A Moment For You</h2>
+            <p class="video-section-subtitle">✨ a special video message ✨</p>
+            
+            <div class="video-frame">
+                <!-- User can replace 'jana_video.mp4' with their actual video file -->
+                <video id="memory-video" class="styled-video" preload="auto" playsinline loop controlsList="nodownload noplaybackrate">
+                    <source src="jana_video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+                <div class="video-overlay" id="play-video-btn">
+                    <div class="play-btn-circle">
+                        <i class="fa-solid fa-play play-icon"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="video-caption">— BIRTHDAY WISHES —</p>
+            <button class="main-btn hidden" id="continue-after-video-btn" style="margin-top: 25px;">Read Your Letter ✉️</button>
+        </div>
+    </section>
+
+    <!-- 3. MAGICAL MESSAGE STAGE -->
+    <section id="letter-page">
+        <div class="letter-ambient-glow glow-a"></div>
+        <div class="letter-ambient-glow glow-b"></div>
+        <div class="glass-message-card">
+            <div class="crown-icon">👑</div>
+            <h3 class="message-title">A Royal Decree for Jana Mater</h3>
+            <div class="ornate-divider"><span></span>✦<span></span></div>
+            <div class="message-content" id="letter-text"></div>
+            <div class="message-footer hidden" id="letter-footer">
+                <p class="closing">With all the warmth & magic,</p>
+                <button class="main-btn mt-4" id="show-stars-btn">OPEN THE GARDEN 🌸</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. STARS FINALE STAGE (HEART -> CAKE) -->
+    <section id="stars-page" class="flex-center">
+        <!-- Luxury Animated Mesh Gradient Background -->
+        <div class="mesh-bg"></div>
+
+        <!-- Floating Premium Petals in Background -->
+        <div class="petal-container" id="entrance-petals"></div>
+
+        <!-- Premium Golden Gate Entrance Wrapper -->
+        <div id="entrance-wrapper" class="flex-center" style="flex-direction: column; gap: 30px; z-index: 20; text-align: center;">
+            
+            <!-- Golden Magic Gate Icon (Elegant SVG) -->
+            <div id="magic-gate" class="gate-glowing" style="cursor: pointer; width: 180px; height: 180px; filter: drop-shadow(0 0 35px rgba(255, 227, 168, 0.8));">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+                    <!-- Archway (thicker gradient outline) -->
+                    <path d="M18 84V38C18 20.3269 32.3269 6 50 6C67.6731 6 82 20.3269 82 38V84" stroke="url(#gate-outline-grad)" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Sunburst halo above the arch -->
+                    <circle cx="50" cy="6" r="6" stroke="#ffe3a8" stroke-width="0.8" opacity="0.55"/>
+                    <g stroke="#ffe3a8" stroke-width="1" stroke-linecap="round" opacity="0.65">
+                        <line x1="50" y1="6" x2="50" y2="-4"/>
+                        <line x1="50" y1="6" x2="41" y2="-1" transform="rotate(20 50 6)"/>
+                        <line x1="50" y1="6" x2="59" y2="-1" transform="rotate(-20 50 6)"/>
+                        <line x1="50" y1="6" x2="35" y2="3" transform="rotate(35 50 6)"/>
+                        <line x1="50" y1="6" x2="65" y2="3" transform="rotate(-35 50 6)"/>
+                    </g>
+                    <circle cx="50" cy="6" r="3" fill="#ffe3a8"/>
+                    <!-- Left Door -->
+                    <path id="gate-door-left" d="M23 84V40C23 27.297 34.297 17 47 17V84H23Z" fill="url(#gate-gold-grad)" stroke="#ffe3a8" stroke-width="1.5" style="transform-origin: 23px 50px; transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);"/>
+                    <!-- Right Door -->
+                    <path id="gate-door-right" d="M77 84V40C77 27.297 65.703 17 53 17V84H77Z" fill="url(#gate-gold-grad)" stroke="#ffe3a8" stroke-width="1.5" style="transform-origin: 77px 50px; transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);"/>
+                    <!-- Door seam + panel detail lines -->
+                    <path d="M50 17V84" stroke="#ffe3a8" stroke-width="1" stroke-dasharray="2 2"/>
+                    <path d="M29 32V78M40 32V78" stroke="#ffe3a8" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M60 32V78M71 32V78" stroke="#ffe3a8" stroke-width="0.6" opacity="0.5"/>
+                    <!-- Base finials -->
+                    <circle cx="18" cy="84" r="2.2" fill="#ffe3a8" opacity="0.85"/>
+                    <circle cx="82" cy="84" r="2.2" fill="#ffe3a8" opacity="0.85"/>
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="gate-gold-grad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="rgba(255, 227, 168, 0.42)"/>
+                            <stop offset="50%" stop-color="rgba(212, 175, 55, 0.25)"/>
+                            <stop offset="100%" stop-color="rgba(255, 227, 168, 0.06)"/>
+                        </linearGradient>
+                        <linearGradient id="gate-outline-grad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffe3a8"/>
+                            <stop offset="100%" stop-color="#ffd700"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Beautiful premium text display for Name and Age -->
+            <div id="stars-text-display" class="flex-center" style="position: static; transform: none; opacity: 1; flex-direction: column; gap: 5px;">
+                <h1 class="stars-name-title" style="font-family: 'Great Vibes', cursive; font-size: clamp(3.5rem, 11vw, 6rem); color: #ff8fab; text-shadow: 0 0 25px rgba(255, 143, 171, 0.7); margin: 0;">Jana Mater</h1>
+                <h2 class="stars-age-subtitle" style="font-family: 'Montserrat', sans-serif; font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; color: #ffe3a8; text-shadow: 0 0 15px rgba(255, 227, 168, 0.6); margin: 0;">21</h2>
+            </div>
+
+            <!-- Invitation Text -->
+            <p id="gate-invitation" style="font-family: 'Cinzel', serif; color: rgba(255,255,255,0.85); font-size: 1.1rem; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); margin: 10px 0 0 0;">TAP THE GOLDEN ARCH TO ENTER THE GARDEN</p>
+        </div>
+
+        <!-- Cake & Flame Area -->
+        <div id="cake-container" class="cake-container flex-center">
+            <div class="cake">
+                <div class="plate"></div>
+                <div class="layer layer-bottom"></div>
+                <div class="layer layer-middle"></div>
+                <div class="layer layer-top">
+                    <div class="icing">
+                        <span class="sprinkle s1"></span>
+                        <span class="sprinkle s2"></span>
+                        <span class="sprinkle s3"></span>
+                        <span class="sprinkle s4"></span>
+                        <span class="sprinkle s5"></span>
+                        <span class="sprinkle s6"></span>
+                    </div>
+                    <div class="drip drip1"></div>
+                    <div class="drip drip2"></div>
+                    <div class="drip drip3"></div>
+                </div>
+                <div class="cake-topper">21</div>
+                <div class="candle">
+                    <div class="flame" id="candle-flame" style="pointer-events: none; opacity: 0.5;"></div>
+                </div>
+            </div>
+            
+            <!-- Safe & Secret Wish input box -->
+            <div id="wish-input-wrapper" class="flex-center" style="margin-top: 20px; gap: 10px; width: 100%; max-width: 320px; z-index: 200;">
+                <input type="text" id="cake-wish-input" placeholder="Write your secret wish..." 
+                       style="width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid rgba(255, 143, 171, 0.3); background: rgba(255,255,255,0.08); color: #fff; text-align: center; font-family: 'Montserrat', sans-serif; outline: none; font-size: 0.85rem;">
+                <button id="submit-cake-wish-btn" class="main-btn" style="padding: 8px 25px; font-size: 0.8rem;">Make Wish 🌟</button>
+            </div>
+
+            <p class="cake-hint" id="blow-hint" style="display: none;">Now, tap the flame to blow it out! 🌬️</p>
+        </div>
+    </section>
+
+    <!-- 5. CELEBRATION POPUP CARD (FINAL STAGE) -->
+    <div class="celebration-popup" id="celebration-popup">
+        <div class="celebration-content">
+            <div class="cake-emoji">✨🎂✨</div>
+            <h2 style="font-size: 2.2rem; color: #ff8fab;">Happy 21st Birthday, Jana Mater!</h2>
+            <p style="margin-top: 10px; color: #71717a;">May this chapter of your life be filled with magic and stellar moments.</p>
+            <div style="margin-top: 25px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button class="close-pink-btn" id="close-celebration-btn">Close ✨</button>
+                <button class="main-btn outline" id="replay-celebration-btn">Watch Again 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GSAP & MotionPath -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Custom script -->
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
