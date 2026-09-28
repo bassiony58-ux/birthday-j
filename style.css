@@ -379,7 +379,7 @@ section.active {
 }
 
 /* --- 2. VIDEO MEMORY STAGE --- */
-#sparkle-pen-page { 
+#sparkle-pen-page { overflow-y: auto; overflow-x: hidden; 
     /* Keep transparent to show global background */ 
     display: flex;
     justify-content: center;
@@ -425,7 +425,7 @@ section.active {
 .styled-video {
     width: 100%;
     height: auto;
-    max-height: 65vh;
+    max-height: 45vh;
     object-fit: contain;
     display: block;
 }
@@ -858,4 +858,6 @@ section.active {
     .message-content { font-size: 1rem; }
 }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+
 
